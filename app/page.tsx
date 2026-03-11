@@ -122,16 +122,16 @@ export default function HomePage() {
             ].map(({ label, detail, highlight }) => (
               <div
                 key={label}
-                className={`flex flex-col items-center text-center px-3 py-3 rounded-xl border transition-colors ${
+                className={`flex flex-col items-center text-center px-3 py-4 rounded-xl border transition-colors ${
                   highlight
                     ? "bg-amber-500/8 border-amber-500/20"
                     : "bg-white/[0.03] border-white/[0.07]"
                 }`}
               >
-                <p className={`text-[11px] font-semibold ${highlight ? "text-amber-400" : "text-slate-400"}`}>
+                <p className={`text-xs font-semibold ${highlight ? "text-amber-400" : "text-slate-300"}`}>
                   {label}
                 </p>
-                <p className="text-[10px] text-slate-600 mt-0.5">{detail}</p>
+                <p className="text-[11px] text-slate-500 mt-1">{detail}</p>
               </div>
             ))}
           </div>
