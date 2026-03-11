@@ -1,7 +1,7 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
 
-const isProtectedRoute = createRouteMatcher(['/teacher(.*)'])
+const isProtectedRoute = createRouteMatcher(['/teacher/dashboard(.*)'])
 const isAuthRoute = createRouteMatcher(['/teacher/login', '/teacher/register'])
 
 export default clerkMiddleware(async (auth, req) => {
@@ -12,8 +12,10 @@ export default clerkMiddleware(async (auth, req) => {
     return NextResponse.redirect(new URL('/teacher/dashboard', req.url))
   }
 
-  // Not logged in → protect all other teacher routes
-  if (isProtectedRoute(req)) await auth.protect()
+  // Not logged in → redirect to your custom login page
+  if (isProtectedRoute(req) && !userId) {
+    return NextResponse.redirect(new URL('/teacher/login', req.url))
+  }
 })
 
 export const config = {
