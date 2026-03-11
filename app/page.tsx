@@ -111,6 +111,32 @@ export default function HomePage() {
           </CardContent>
         </Card>
 
+        {/* Feature badges */}
+        <div className="mt-6 space-y-3">
+          <p className="text-center text-[10px] font-semibold tracking-[0.16em] uppercase text-slate-600">Platform Features</p>
+          <div className="grid grid-cols-3 gap-2">
+            {[
+              { label: "LaTeX Math", detail: "x² √ ∫ π", highlight: true },
+              { label: "Quiz Timer", detail: "Auto-submit" },
+              { label: "Instant Results", detail: "Per-question" },
+            ].map(({ label, detail, highlight }) => (
+              <div
+                key={label}
+                className={`flex flex-col items-center text-center px-3 py-3 rounded-xl border transition-colors ${
+                  highlight
+                    ? "bg-amber-500/8 border-amber-500/20"
+                    : "bg-white/[0.03] border-white/[0.07]"
+                }`}
+              >
+                <p className={`text-[11px] font-semibold ${highlight ? "text-amber-400" : "text-slate-400"}`}>
+                  {label}
+                </p>
+                <p className="text-[10px] text-slate-600 mt-0.5">{detail}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
       </div>
     </main>
   )
