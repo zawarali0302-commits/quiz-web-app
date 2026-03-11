@@ -1,0 +1,79 @@
+import { Skeleton } from "@/components/ui/skeleton"
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { Separator } from "@/components/ui/separator"
+
+export default function ResultsLoading() {
+  return (
+    <div className="min-h-screen bg-[#1a1d26] text-slate-100">
+      <div className="h-[3px] w-full bg-gradient-to-r from-amber-500 via-amber-400 to-transparent" />
+
+      <div className="max-w-5xl mx-auto px-6 py-12 space-y-10">
+
+        {/* ── Header ── */}
+        <div className="flex items-start justify-between">
+          <div className="space-y-2">
+            <Skeleton className="h-8 w-36 bg-white/[0.05] rounded-md mb-4" />
+            <Skeleton className="h-3 w-24 bg-white/[0.06]" />
+            <Skeleton className="h-10 w-72 bg-white/[0.06]" />
+          </div>
+          <Skeleton className="h-6 w-28 rounded-full bg-white/[0.06] mt-10" />
+        </div>
+
+        {/* ── Stat Cards ── */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          {[...Array(4)].map((_, i) => (
+            <Card key={i} className="bg-[#22263380] border border-white/[0.07]">
+              <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
+                <Skeleton className="h-3 w-20 bg-white/[0.06]" />
+                <Skeleton className="h-7 w-7 rounded-md bg-white/[0.06]" />
+              </CardHeader>
+              <CardContent>
+                <Skeleton className="h-8 w-16 bg-white/[0.06] mb-2" />
+                <Skeleton className="h-3 w-24 bg-white/[0.04]" />
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* ── Table Card ── */}
+        <Card className="bg-[#22263380] border border-white/[0.07] overflow-hidden">
+          <CardHeader className="flex flex-row items-center justify-between pb-4">
+            <div className="space-y-1.5">
+              <Skeleton className="h-4 w-36 bg-white/[0.06]" />
+              <Skeleton className="h-3 w-48 bg-white/[0.04]" />
+            </div>
+            <Skeleton className="h-4 w-20 bg-white/[0.05]" />
+          </CardHeader>
+
+          <Separator className="bg-white/[0.06]" />
+
+          <CardContent className="p-0">
+            {/* Table header */}
+            <div className="flex items-center gap-6 px-6 py-3 border-b border-white/[0.06]">
+              <Skeleton className="h-3 w-24 bg-white/[0.05]" />
+              <Skeleton className="h-3 w-16 bg-white/[0.05]" />
+              <Skeleton className="h-3 w-24 bg-white/[0.05]" />
+              <Skeleton className="h-3 w-16 bg-white/[0.05]" />
+              <Skeleton className="h-3 w-20 bg-white/[0.05] ml-auto" />
+            </div>
+
+            {/* Table rows */}
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="flex items-center gap-6 px-6 py-4 border-b border-white/[0.04] last:border-0">
+                <Skeleton className="h-4 w-32 bg-white/[0.06]" />
+                <Skeleton className="h-4 w-14 bg-white/[0.05]" />
+                <div className="flex items-center gap-2">
+                  <Skeleton className="h-1.5 w-20 rounded-full bg-white/[0.05]" />
+                  <Skeleton className="h-4 w-10 bg-white/[0.05]" />
+                </div>
+                <Skeleton className="h-6 w-20 rounded-full bg-white/[0.05]" />
+                <Skeleton className="h-3 w-24 bg-white/[0.05] ml-auto" />
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+
+      </div>
+    </div>
+  )
+}
