@@ -40,16 +40,17 @@ export default async function TeacherDashboard() {
         {/* Header */}
         <div className="flex items-end justify-between">
           <div className="space-y-1">
-            <p className="text-[11px] font-semibold tracking-[0.18em] uppercase text-amber-400">
+            <p className="flex text-[11px] font-semibold tracking-[0.18em] uppercase text-amber-400">
               Educator Portal
             </p>
+
             <h1 className="text-4xl font-bold tracking-tight text-slate-50">
               Welcome back{user.firstName ? `, ${user.firstName}` : ""}
             </h1>
             <p className="text-sm text-slate-500">{user.emailAddresses[0]?.emailAddress}</p>
           </div>
-          <div className="flex items-center gap-3">
-            <SignOutButton />
+          <div className="flex flex-wrap items-center gap-3">
+            <SignOutButton  />
             <Button
               asChild
               className="bg-amber-500 hover:bg-amber-600 text-white hover:text-white font-semibold transition-colors"
