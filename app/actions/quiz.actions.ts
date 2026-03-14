@@ -1,6 +1,6 @@
 "use server"
 
-import { auth, currentUser } from "@clerk/nextjs/server"
+import { currentUser } from "@clerk/nextjs/server"
 import { redirect } from "next/navigation"
 import { revalidatePath } from "next/cache"
 import { addQuiz, getQuizById, removeQuiz, upsertTeacher, addSubmission, getSubmissionByStudentAndQuiz, toggleQuizOpen, editQuiz } from "@/prisma/quiz.service"
@@ -12,59 +12,67 @@ type QuestionInput = {
 }
 
 export const createQuiz = async (data: FormData) => {
-  const { userId } = await auth()
-  if (!userId) redirect("/teacher/login")
-
-  // ✅ Ensure teacher exists in DB — create if first time
   const user = await currentUser()
+  if (!user) redirect("/teacher/login")
+
   await upsertTeacher({
-    id: userId,
-    name: `${user?.firstName ?? ""} ${user?.lastName ?? ""}`.trim() || "Teacher",
-    email: user?.emailAddresses[0]?.emailAddress ?? "",
+    id: user.id,
+    name: `${user.firstName ?? ""} ${user.lastName ?? ""}`.trim() || "Teacher",
+    email: user.emailAddresses[0]?.emailAddress ?? "",
   })
 
   const title = (data.get("title") as string)?.trim()
   const rawQuestions = data.get("questions") as string
   const rawTimeLimit = data.get("timeLimit") as string
+
   const timeLimit = rawTimeLimit ? parseInt(rawTimeLimit) : null
 
   if (!title) throw new Error("Quiz title is required.")
   if (!rawQuestions) throw new Error("Questions are required.")
 
   let questions: QuestionInput[]
+
   try {
     questions = JSON.parse(rawQuestions)
   } catch {
     throw new Error("Invalid questions format.")
   }
 
-  if (!Array.isArray(questions) || questions.length === 0)
+  if (!Array.isArray(questions) || questions.length === 0) {
     throw new Error("At least one question is required.")
-
-  for (const [i, q] of questions.entries()) {
-    if (!q.question?.trim())
-      throw new Error(`Question ${i + 1} text is missing.`)
-    if (!Array.isArray(q.options) || q.options.length < 2)
-      throw new Error(`Question ${i + 1} must have at least 2 options.`)
-    if (q.options.some((o: string) => !o?.trim()))
-      throw new Error(`Question ${i + 1} has an empty option.`)
-    if (q.correctIndex < 0 || q.correctIndex >= q.options.length)
-      throw new Error(`Question ${i + 1} has an invalid correct answer.`)
   }
 
-  await addQuiz(title, userId, questions, timeLimit)
+  for (const [i, q] of questions.entries()) {
+    if (!q.question?.trim()) {
+      throw new Error(`Question ${i + 1} text is missing.`)
+    }
+
+    if (!Array.isArray(q.options) || q.options.length < 2) {
+      throw new Error(`Question ${i + 1} must have at least 2 options.`)
+    }
+
+    if (q.options.some((o: string) => !o?.trim())) {
+      throw new Error(`Question ${i + 1} has an empty option.`)
+    }
+
+    if (q.correctIndex < 0 || q.correctIndex >= q.options.length) {
+      throw new Error(`Question ${i + 1} has an invalid correct answer.`)
+    }
+  }
+
+  await addQuiz(title, user.id, questions, timeLimit)
 
   revalidatePath("/teacher/dashboard")
   redirect("/teacher/dashboard")
 }
 
 export const deleteQuiz = async (quizId: string) => {
-  const { userId } = await auth()
-  if (!userId) redirect("/teacher/login")
+  const user = await currentUser()
+  if (!user) redirect("/teacher/login")
 
   const quiz = await getQuizById(quizId)
   if (!quiz) throw new Error("Quiz not found.")
-  if (quiz.teacherId !== userId) throw new Error("Unauthorized.")
+  if (quiz.teacherId !== user.id) throw new Error("Unauthorized.")
 
   await removeQuiz(quizId)
 
@@ -72,12 +80,12 @@ export const deleteQuiz = async (quizId: string) => {
 }
 
 export const updateQuiz = async (quizId: string, data: FormData) => {
-  const { userId } = await auth()
-  if (!userId) redirect("/teacher/login")
+  const user = await currentUser()
+  if (!user) redirect("/teacher/login")
 
   const quiz = await getQuizById(quizId)
   if (!quiz) throw new Error("Quiz not found.")
-  if (quiz.teacherId !== userId) throw new Error("Unauthorized.")
+  if (quiz.teacherId !== user.id) throw new Error("Unauthorized.")
 
   const title = (data.get("title") as string)?.trim()
   const rawQuestions = data.get("questions") as string
@@ -116,12 +124,12 @@ export const updateQuiz = async (quizId: string, data: FormData) => {
 }
 
 export const toggleQuiz = async (quizId: string, isOpen: boolean) => {
-  const { userId } = await auth()
-  if (!userId) redirect("/teacher/login")
+  const user = await currentUser()
+  if (!user) redirect("/teacher/login")
 
   const quiz = await getQuizById(quizId)
   if (!quiz) throw new Error("Quiz not found.")
-  if (quiz.teacherId !== userId) throw new Error("Unauthorized.")
+  if (quiz.teacherId !== user.id) throw new Error("Unauthorized.")
 
   await toggleQuizOpen(quizId, isOpen)
   revalidatePath("/teacher/dashboard")
@@ -138,7 +146,6 @@ export const submitQuiz = async (data: FormData) => {
   if (!studentId) throw new Error("Student ID is required.")
   if (!rawAnswers) throw new Error("Answers are required.")
 
-  // Check for duplicate submission
   const existing = await getSubmissionByStudentAndQuiz(quizId, studentId)
   if (existing) throw new Error("You have already attempted this quiz.")
 

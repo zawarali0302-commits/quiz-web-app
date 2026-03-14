@@ -21,7 +21,6 @@ export default function HomePage() {
 
   return (
     <main className="min-h-screen bg-[#1a1d26] flex items-center justify-center p-6 relative overflow-hidden">
-
       {/* Top amber bar */}
       <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-amber-500 via-amber-400 to-transparent" />
 
@@ -101,7 +100,7 @@ export default function HomePage() {
                 asChild
                 className="w-full h-11 border-white/[0.15] bg-transparent text-slate-300 hover:text-slate-100 hover:border-white/30 hover:bg-white/[0.07] transition-all"
               >
-                <Link href="/teacher/login">
+                <Link href="/auth/login">
                   <GraduationCap className="w-4 h-4 mr-2" />
                   Teacher Login
                 </Link>

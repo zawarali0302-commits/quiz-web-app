@@ -1,9 +1,9 @@
-import { SignIn } from "@clerk/nextjs"
+import { SignUp } from "@clerk/nextjs"
 import { GraduationCap } from "lucide-react"
 
-export default function TeacherLoginPage() {
+const page = () => {
   return (
-    <div className="min-h-screen bg-[#1a1d26] flex">
+     <div className="min-h-screen bg-[#1a1d26] flex">
 
       {/* Top amber bar */}
       <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-amber-500 via-amber-400 to-transparent z-10" />
@@ -35,9 +35,9 @@ export default function TeacherLoginPage() {
         <div className="relative z-10 space-y-6">
           <div className="w-10 h-[2px] bg-amber-500/70" />
           <blockquote className="text-2xl font-semibold text-slate-100 leading-snug tracking-tight">
-            "The art of teaching is the art of assisting discovery."
+            "Education is not the filling of a pail, but the lighting of a fire."
           </blockquote>
-          <p className="text-sm text-slate-500">— Mark Van Doren</p>
+          <p className="text-sm text-slate-500">— W.B. Yeats</p>
         </div>
 
         {/* Dot grid */}
@@ -52,7 +52,7 @@ export default function TeacherLoginPage() {
         </div>
       </div>
 
-      {/* ── Right panel — Clerk SignIn ── */}
+      {/* ── Right panel — Clerk SignUp ── */}
       <div className="w-full lg:w-1/2 flex flex-col items-center justify-center gap-6 p-6 relative bg-[#1c1f2b]">
 
         {/* Mobile logo */}
@@ -67,13 +67,11 @@ export default function TeacherLoginPage() {
           <p className="text-[11px] font-semibold tracking-[0.18em] uppercase text-amber-400">
             Educator Portal
           </p>
-          <p className="text-slate-500 text-sm">Sign in to access your dashboard</p>
+          <p className="text-slate-500 text-sm">Create your teacher account</p>
         </div>
 
-        {/* Clerk SignIn — styled via Clerk appearance API */}
-        <SignIn
-          signUpUrl="/teacher/register"
-          forceRedirectUrl="/teacher/dashboard"
+        <SignUp
+          signInUrl="/auth/login"
           appearance={{
             variables: {
               colorPrimary: "#f59e0b",
@@ -110,3 +108,5 @@ export default function TeacherLoginPage() {
     </div>
   )
 }
+
+export default page

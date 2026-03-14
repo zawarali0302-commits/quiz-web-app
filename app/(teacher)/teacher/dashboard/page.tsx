@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { Plus, ExternalLink, BarChart3, BookOpen, Users, FileQuestion } from "lucide-react"
-import { auth, currentUser } from "@clerk/nextjs/server"
+import { currentUser } from "@clerk/nextjs/server"
 import { redirect } from "next/navigation"
 
 import { Button } from "@/components/ui/button"
@@ -22,12 +22,10 @@ import CopyCodeButton from "@/components/copy-code-button"
 import QuizToggleButton from "@/components/quiz-toggle-button"
 
 export default async function TeacherDashboard() {
-  const { userId } = await auth()
-  if (!userId) redirect("/teacher/login")
-
   const user = await currentUser()
-  const quizzes = await getQuizzesByTeacher(userId)
+  if (!user) redirect("/auth/login")
 
+  const quizzes = await getQuizzesByTeacher(user.id)
   const totalQuestions = quizzes.reduce((a, q) => a + q.questions.length, 0)
   const totalSubmissions = quizzes.reduce((a, q) => a + q.submissions.length, 0)
 
@@ -39,16 +37,16 @@ export default async function TeacherDashboard() {
 
       <div className="max-w-5xl mx-auto px-6 py-12 space-y-10">
 
-        {/* ── Header ── */}
+        {/* Header */}
         <div className="flex items-end justify-between">
           <div className="space-y-1">
             <p className="text-[11px] font-semibold tracking-[0.18em] uppercase text-amber-400">
               Educator Portal
             </p>
             <h1 className="text-4xl font-bold tracking-tight text-slate-50">
-              Welcome back{user?.firstName ? `, ${user.firstName}` : ""}
+              Welcome back{user.firstName ? `, ${user.firstName}` : ""}
             </h1>
-            <p className="text-sm text-slate-500">{user?.emailAddresses[0]?.emailAddress}</p>
+            <p className="text-sm text-slate-500">{user.emailAddresses[0]?.emailAddress}</p>
           </div>
           <div className="flex items-center gap-3">
             <SignOutButton />
@@ -64,7 +62,7 @@ export default async function TeacherDashboard() {
           </div>
         </div>
 
-        {/* ── Stat Cards ── */}
+        {/* Stat Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {[
             { label: "Total Quizzes", value: quizzes.length, sub: "Active assessments", icon: BookOpen },
@@ -91,7 +89,7 @@ export default async function TeacherDashboard() {
           ))}
         </div>
 
-        {/* ── Quiz Table Card ── */}
+        {/* Quiz Table Card */}
         <Card className="bg-[#22263380] border border-white/[0.1] overflow-hidden">
           <CardHeader className="flex flex-row items-center justify-between pb-4">
             <div>

@@ -1,4 +1,15 @@
 import prisma from "@/lib/prisma"
+import { currentUser } from "@clerk/nextjs/server"
+
+
+export const getPlatformStats = async () => {
+  const [teacherCount, quizCount, submissionCount] = await Promise.all([
+    prisma.teacher.count(),
+    prisma.quiz.count(),
+    prisma.submission.count(),
+  ])
+  return { teacherCount, quizCount, submissionCount }
+}
 
 type QuestionInput = {
   question: string
@@ -27,7 +38,12 @@ export const getQuizById = async (quizId: string) => {
   })
 }
 
-export const addQuiz = async (title: string, teacherId: string, questions: QuestionInput[], timeLimit: number | null) => {
+export const addQuiz = async (
+  title: string,
+  teacherId: string,
+  questions: QuestionInput[],
+  timeLimit: number | null
+) => {
   return await prisma.quiz.create({
     data: {
       title,

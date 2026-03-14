@@ -1,7 +1,10 @@
-import { SignUp } from "@clerk/nextjs"
+"use client"
+
+import { SignInButton } from "@clerk/nextjs"
+import { SignIn } from "@clerk/react"
 import { GraduationCap } from "lucide-react"
 
-export default function TeacherRegisterPage() {
+const page = () => {
   return (
     <div className="min-h-screen bg-[#1a1d26] flex">
 
@@ -35,9 +38,9 @@ export default function TeacherRegisterPage() {
         <div className="relative z-10 space-y-6">
           <div className="w-10 h-[2px] bg-amber-500/70" />
           <blockquote className="text-2xl font-semibold text-slate-100 leading-snug tracking-tight">
-            "Education is not the filling of a pail, but the lighting of a fire."
+            "The art of teaching is the art of assisting discovery."
           </blockquote>
-          <p className="text-sm text-slate-500">— W.B. Yeats</p>
+          <p className="text-sm text-slate-500">— Mark Van Doren</p>
         </div>
 
         {/* Dot grid */}
@@ -52,7 +55,7 @@ export default function TeacherRegisterPage() {
         </div>
       </div>
 
-      {/* ── Right panel — Clerk SignUp ── */}
+      {/* ── Right panel — Clerk SignIn ── */}
       <div className="w-full lg:w-1/2 flex flex-col items-center justify-center gap-6 p-6 relative bg-[#1c1f2b]">
 
         {/* Mobile logo */}
@@ -67,12 +70,11 @@ export default function TeacherRegisterPage() {
           <p className="text-[11px] font-semibold tracking-[0.18em] uppercase text-amber-400">
             Educator Portal
           </p>
-          <p className="text-slate-500 text-sm">Create your teacher account</p>
+          <p className="text-slate-500 text-sm">Sign in to access your dashboard</p>
         </div>
-
-        <SignUp
-          signInUrl="/teacher/login"
-          forceRedirectUrl="/teacher"
+        {/* Clerk SignIn — styled via Clerk appearance API */}
+        <SignIn
+          signUpUrl="/auth/register"
           appearance={{
             variables: {
               colorPrimary: "#f59e0b",
@@ -104,8 +106,10 @@ export default function TeacherRegisterPage() {
             },
           }}
         />
-
       </div>
+
     </div>
   )
 }
+
+export default page
