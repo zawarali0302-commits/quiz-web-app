@@ -106,7 +106,7 @@ export default function HomePage() {
           <Link href="/auth/login"
             className="text-xs sm:text-sm font-semibold px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg bg-white/[0.06] border border-white/[0.1] text-slate-200 hover:bg-white/[0.1] transition-all whitespace-nowrap"
           >
-            <span className="hidden sm:inline">Login</span>
+            <span className="hidden sm:inline">Teacher Login</span>
             <span className="sm:hidden">Login</span>
           </Link>
         </div>
