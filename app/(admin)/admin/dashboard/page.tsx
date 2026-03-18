@@ -1,6 +1,7 @@
 import { currentUser } from "@clerk/nextjs/server"
 import { redirect } from "next/navigation"
 import { getTeachers } from "@/prisma/teacher.service"
+import { getPlatformStats } from "@/prisma/exam.service"
 import { Shield, Users, BookOpen, FileText } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -8,12 +9,11 @@ import { Separator } from "@/components/ui/separator"
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table"
-import { getPlatformStats } from "@/prisma/quiz.service"
 import DeleteTeacherButton from "@/components/delete-teacher-button"
 
 export default async function AdminDashboard() {
   const user = await currentUser()
-  if (!user) redirect("/teacher/login")
+  if (!user) redirect("/auth/login")
 
   const role = (user.publicMetadata as { role?: string })?.role
   if (role !== "admin") redirect("/teacher/dashboard")

@@ -59,3 +59,51 @@ model Submission {
 
   @@unique([quizId, studentId])
 }
+
+//for mock test
+
+model BankQuestion {
+  id           String   @id @default(cuid())
+  sectionId    String
+  section      Section  @relation(fields: [sectionId], references: [id])
+  question     String
+  options      String[]
+  correctIndex Int
+  explanation  String? // shown after submission
+}
+
+
+
+model Exam {
+  id   String @id @default(cuid())
+  name String @unique
+
+  sections        Section[]
+  mockTestResults MockTestResult[]
+}
+
+model Section {
+  id        String @id @default(cuid())
+  name      String
+  examId    String
+  exam      Exam   @relation(fields: [examId], references: [id])
+  timeLimit Int
+
+  questions BankQuestion[]
+
+  @@unique([examId, name])
+}
+
+model MockTestResult {
+  id          String   @id @default(cuid())
+  examId      String
+  exam        Exam     @relation(fields: [examId], references: [id])
+  sectionId   String?
+  studentName String
+  studentId   String
+  answers     Int[]
+  score       Int
+  totalQ      Int
+  timeTaken   Int
+  createdAt   DateTime @default(now())
+}
