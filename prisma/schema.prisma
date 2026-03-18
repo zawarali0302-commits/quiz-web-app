@@ -2,15 +2,15 @@ generator client {
   provider = "prisma-client"
   output   = "../app/generated/prisma/client"
 }
+
 datasource db {
   provider = "postgresql"
 }
 
-
 model Teacher {
-  id     String @id @default(cuid())
-  name   String
-  email  String @unique
+  id    String @id @default(cuid())
+  name  String
+  email String @unique
 
   quizzes Quiz[]
 }
@@ -73,10 +73,10 @@ model Exam {
 }
 
 model Section {
-  id        String @id @default(cuid())
-  name      String
-  examId    String
-  exam      Exam   @relation(fields: [examId], references: [id], onDelete: Cascade)
+  id     String @id @default(cuid())
+  name   String
+  examId String
+  exam   Exam   @relation(fields: [examId], references: [id], onDelete: Cascade)
 
   timeLimit Int
 
@@ -88,9 +88,9 @@ model Section {
 }
 
 model BankQuestion {
-  id           String  @id @default(cuid())
-  sectionId    String
-  section      Section @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  id        String  @id @default(cuid())
+  sectionId String
+  section   Section @relation(fields: [sectionId], references: [id], onDelete: Cascade)
 
   question     String
   options      String[]
@@ -101,10 +101,10 @@ model BankQuestion {
 }
 
 model MockTestResult {
-  id     String @id @default(cuid())
+  id String @id @default(cuid())
 
   examId String
-  exam   Exam @relation(fields: [examId], references: [id], onDelete: Cascade)
+  exam   Exam   @relation(fields: [examId], references: [id], onDelete: Cascade)
 
   sectionId String
   section   Section @relation(fields: [sectionId], references: [id], onDelete: Cascade)
