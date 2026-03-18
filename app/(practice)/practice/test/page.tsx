@@ -1,7 +1,6 @@
 import { notFound, redirect } from "next/navigation"
 import { getSectionById, getExamById } from "@/prisma/exam.service"
 import MockTestPage from "./mock-test-page"
-import prisma from "@/lib/prisma"
 
 export default async function MockTestServerPage({
   searchParams,

@@ -34,7 +34,6 @@ export default function MockTestPage({
   studentId,
   testTitle,
 }: Props) {
-  const router = useRouter()
   const [answers, setAnswers] = useState<(number | null)[]>(Array(questions.length).fill(null))
   const [current, setCurrent] = useState(0)
   const [timeLeft, setTimeLeft] = useState(timeLimit)
@@ -46,9 +45,6 @@ export default function MockTestPage({
     setSubmitting(true)
     const timeTaken = timeLimit - timeLeft
     const finalAnswers = answers.map((a) => a ?? -1)
-    const score = questions.reduce((total, q, i) => {
-      return finalAnswers[i] === q.correctIndex ? total + 1 : total
-    }, 0)
     try {
       await submitMockTest({
         examId,
@@ -56,12 +52,14 @@ export default function MockTestPage({
         studentName,
         studentId,
         answers: finalAnswers,
-        score,
+        score: 0, // calculated server-side
         totalQ: questions.length,
         timeTaken,
       })
     } catch (err: any) {
       if (err?.digest?.startsWith("NEXT_REDIRECT")) return
+      if (err?.message?.includes("NEXT_REDIRECT")) return
+      console.error("Submit error:", err)
       setSubmitting(false)
     }
   }, [submitting, answers, questions, examId, sectionId, studentName, studentId, timeLimit, timeLeft])
