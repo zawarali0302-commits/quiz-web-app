@@ -105,8 +105,8 @@ model MockTestResult {
   examId String
   exam   Exam   @relation(fields: [examId], references: [id], onDelete: Cascade)
 
-  sectionId String
-  section   Section @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  sectionId String?
+  section   Section? @relation(fields: [sectionId], references: [id], onDelete: Cascade)
 
   studentId   String
   studentName String
